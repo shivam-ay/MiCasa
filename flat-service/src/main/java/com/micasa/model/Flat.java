@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.UuidGenerator;
 
+/**
+ * Model class for database operations.
+ */
 @Data
 @ToString
 @NoArgsConstructor
