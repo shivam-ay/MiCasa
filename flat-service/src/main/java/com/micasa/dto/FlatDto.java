@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+/**
+ * FlatDto class for user interaction.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

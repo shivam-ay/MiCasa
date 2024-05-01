@@ -2,6 +2,9 @@ package com.micasa.exception;
 
 import lombok.*;
 
+/**
+ * BadRequestException class.
+ */
 @Getter
 @Setter
 @Builder
