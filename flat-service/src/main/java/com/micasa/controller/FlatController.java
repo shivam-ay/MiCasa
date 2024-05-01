@@ -18,7 +18,7 @@ public class FlatController
         this.flatService = flatService;
     }
 
-    @PostMapping(value = "/add/flat", produces = MediaType.ALL_VALUE)
+    @PostMapping(value = "/add/flat")
     public FlatDto addFlat(@RequestBody  FlatDto flatDto)
     {
         return this.flatService.addNewFlat(flatDto);
