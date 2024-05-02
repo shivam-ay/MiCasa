@@ -74,7 +74,7 @@ public class FlatServiceImpl implements FlatService
         Flat flat = this.findFlatByFlatId(flatId);
         flat.setOccupied(occupiedStatus);
         flat = this.flatRepository.save(flat);
-        log.debug("Flat with id: {} updated with occupied status: {}", flatId, occupiedStatus);
+        log.info("Flat with flatId: {} updated with occupied status: {}", flatId, occupiedStatus);
         return flat;
     }
 
@@ -93,7 +93,7 @@ public class FlatServiceImpl implements FlatService
     {
         Flat flat = this.findFlatByFlatId(flatId);
         this.flatRepository.delete(flat);
-        log.info("Flat with id: {} deleted", flatId);
+        log.info("Flat with flatId: {} deleted", flatId);
     }
 
     /**

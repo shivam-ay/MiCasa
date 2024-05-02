@@ -24,4 +24,5 @@ public class FlatDto implements Serializable
     @Column(name = "flat_block")
     private String flatBlock;
     private boolean occupied;
+    private SocietyDto society;
 }

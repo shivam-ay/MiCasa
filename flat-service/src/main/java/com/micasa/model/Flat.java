@@ -19,6 +19,7 @@ import org.hibernate.annotations.UuidGenerator;
 public class Flat
 {
     @Id
+    @Column(name = "flat_id")
     @UuidGenerator
     private String flatId;
     @Column(name = "flat_number")
@@ -27,10 +28,15 @@ public class Flat
     private String flatBlock;
     private boolean occupied;
 
-    public Flat(String flatNumber, String flatBlock, boolean occupied)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "society_id")
+    private Society society;
+
+    public Flat(String flatNumber, String flatBlock, boolean occupied, Society society)
     {
         this.flatNumber = flatNumber;
         this.flatBlock = flatBlock;
         this.occupied = occupied;
+        this.society = society;
     }
 }
