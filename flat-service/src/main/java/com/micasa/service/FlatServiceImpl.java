@@ -111,7 +111,7 @@ public class FlatServiceImpl implements FlatService
     public Flat findFlatByFlatId(String flatId)
     {
         Optional<Flat> flatOptional = this.flatRepository.findById(flatId);
-        Flat flat = flatOptional.orElseThrow(() -> {
+        return flatOptional.orElseThrow(() -> {
             log.error("Flat not found with flat Id: {}", flatId);
             return BadRequestException.builder()
                     .message(ExceptionMessages.NO_RECORD_PRESENT_MSG)
@@ -119,14 +119,20 @@ public class FlatServiceImpl implements FlatService
                     .timestamp(System.currentTimeMillis())
                     .build();
         });
-        log.debug("Flat with id: {} found", flatId);
-        return flat;
     }
 
     @Override
     public List<Flat> findFlatByBlockNumber(String blockNumber)
     {
-        return List.of();
+        Optional<List<Flat>> flatListOptional = this.flatRepository.findByFlatBlockOrderByFlatNumberDesc(blockNumber);
+        return flatListOptional.orElseThrow(() -> {
+                log.error("No flats present with block number: {}", blockNumber);
+                return BadRequestException.builder()
+                        .message(ExceptionMessages.NO_RECORD_PRESENT_MSG)
+                        .fieldValue(blockNumber)
+                        .timestamp(System.currentTimeMillis())
+                        .build();
+            });
     }
 
     @Override
