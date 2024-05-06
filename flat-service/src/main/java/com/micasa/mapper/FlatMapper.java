@@ -4,6 +4,8 @@ import com.micasa.dto.FlatDto;
 import com.micasa.model.Flat;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 /**
  * Mapper class for Flat and FlatDto.
  */
@@ -22,4 +24,6 @@ public interface FlatMapper
      * @return : FlatDto object.
      */
     FlatDto flatEntityToFlatDto(Flat flat);
+
+    List<FlatDto> flatEntityListToFlatDtoList(List<Flat> flatList);
 }

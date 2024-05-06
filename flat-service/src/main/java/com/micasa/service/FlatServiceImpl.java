@@ -4,6 +4,7 @@ import com.micasa.constants.ExceptionMessages;
 import com.micasa.dto.FlatDto;
 import com.micasa.exception.BadRequestException;
 import com.micasa.model.Flat;
+import com.micasa.model.User;
 import com.micasa.repository.FlatRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import java.util.Optional;
  *     5. findFlatByBlockNumber(String); Find a flat by block number.
  *     6. findFlatByFlatNumber(String); Find a flat by flat number.
  *     7. findFlatByBlockNumberAndFlatNumber(String, String); Find a flat by block number and flat number.
+ *     8. Flat addUserToFlat(String, User); Add a user to flat.
  */
 @Slf4j
 @Service(value = "flatService")
@@ -121,6 +123,17 @@ public class FlatServiceImpl implements FlatService
         });
     }
 
+    /**
+     * Function to look for flats with block number.
+     * Structure:
+     *  1. Use flatRepository to get flats with passed block number.
+     *      If found:
+     *          2.1 Return found flats.
+     *      Else:
+     *          2.1 throw BadRequestException.
+     * @param blockNumber : blockNumber to look for flats.
+     * @return : List of flats with passed block number.
+     */
     @Override
     public List<Flat> findFlatByBlockNumber(String blockNumber)
     {
@@ -135,13 +148,76 @@ public class FlatServiceImpl implements FlatService
             });
     }
 
+    /**
+     * Function to look for flats with flat number.
+     * Structure:
+     *  1. Use flatRepository to get flats with passed flat number.
+     *      If found:
+     *          2.1 Return found flats.
+     *      Else:
+     *          2.1 throw BadRequestException.
+     * @param flatNumber : flatNumber to look for flats.
+     * @return : List of flats with passed flat number.
+     */
     @Override
-    public List<Flat> findFlatByFlatNumber(String flatNumber) {
-        return List.of();
+    public List<Flat> findFlatByFlatNumber(String flatNumber)
+    {
+        Optional<List<Flat>> flatListOptional = this.flatRepository.findByFlatNumberOrderByFlatBlockDesc(flatNumber);
+        return flatListOptional.orElseThrow(() -> {
+            log.error("No flats present with flat number: {}", flatNumber);
+            return BadRequestException.builder()
+                    .message(ExceptionMessages.NO_RECORD_PRESENT_MSG)
+                    .fieldValue(flatNumber)
+                    .timestamp(System.currentTimeMillis())
+                    .build();
+        });
     }
 
+    /**
+     * Function to look for flat with flat number and block number.
+     * Structure:
+     *  1. Use flatRepository to get flats with passed flat number and block number.
+     *      If found:
+     *          2.1 Return found flat.
+     *      Else:
+     *          2.1 throw BadRequestException.
+     * @param blockNumber : blockNumber to look for flat.
+     * @param flatNumber : flatNumber to look for flat.
+     * @return : Flats with passed flat number and block number.
+     */
     @Override
-    public Flat findFlatByBlockNumberAndFlatNumber(String blockNumber, String flatNumber) {
-        return null;
+    public Flat findFlatByBlockNumberAndFlatNumber(String flatNumber, String blockNumber)
+    {
+        Optional<Flat> flatOptional = this.flatRepository.findByFlatNumberAndFlatBlock(flatNumber,blockNumber);
+        return flatOptional.orElseThrow(() -> {
+            log.error("No flats present with flat number: {} and block number: {}", flatNumber,blockNumber);
+            return BadRequestException.builder()
+                    .message(ExceptionMessages.NO_RECORD_PRESENT_MSG)
+                    .fieldValue(flatNumber)
+                    .timestamp(System.currentTimeMillis())
+                    .build();
+        });
+    }
+
+    /**
+     * This function adds a user to flat.
+     * Structure:
+     *  1. Look for flat with passed flat id.
+     *      If found:
+     *          1.1 Add user to flat.
+     *          1.2 Save to database.
+     *          1.3 Return updated flat.
+     *      Else:
+     *          1.1 throw BadRequestException.
+     * @param flatId : FlatId on which user will be added.
+     * @param user : user that has to be added to flat.
+     * @return : updated flat object.
+     */
+    @Override
+    public Flat addUserToFlat(String flatId, User user)
+    {
+        Flat flat = this.findFlatByFlatId(flatId);
+        flat.setUser(user);
+        return this.flatRepository.save(flat);
     }
 }

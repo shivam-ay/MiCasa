@@ -25,4 +25,5 @@ public class FlatDto implements Serializable
     private String flatBlock;
     private boolean occupied;
     private SocietyDto society;
+    private UserDto userDto;
 }

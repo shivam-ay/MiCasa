@@ -32,6 +32,10 @@ public class Flat
     @JoinColumn(name = "society_id")
     private Society society;
 
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, optional = true)
+    @JoinColumn(name = "email")
+    private User user;
+
     public Flat(String flatNumber, String flatBlock, boolean occupied, Society society)
     {
         this.flatNumber = flatNumber;
