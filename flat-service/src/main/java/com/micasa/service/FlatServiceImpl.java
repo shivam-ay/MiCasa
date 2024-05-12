@@ -1,7 +1,6 @@
 package com.micasa.service;
 
 import com.micasa.constants.ExceptionMessages;
-import com.micasa.dto.FlatDto;
 import com.micasa.exception.BadRequestException;
 import com.micasa.model.Flat;
 import com.micasa.model.User;
@@ -61,7 +60,7 @@ public class FlatServiceImpl implements FlatService
      * Structure:
      *  1. Look for a flat with passed flatId
      *      If found
-     *          1.1 Set new occupied status
+     *          1.1 Set new occupied status.
      *          1.2 Update in database.
      *          1.3 Return updated flat.
      *      Else

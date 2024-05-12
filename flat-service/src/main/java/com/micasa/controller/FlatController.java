@@ -66,7 +66,6 @@ public class FlatController
         FlatDto flatDtoSaved = this.flatMapper.flatEntityToFlatDto(savedFlat);
         return ResponseEntity.status(HttpStatus.CREATED).body(flatDtoSaved);
     }
-
     /**
      * Function to find a flat by using flatId.
      * Structure:

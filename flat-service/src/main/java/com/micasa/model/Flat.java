@@ -14,7 +14,7 @@ import org.hibernate.annotations.UuidGenerator;
 @NoArgsConstructor
 @Entity(name = "flats")
 @Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"flat_number","flat_block"})
+        @UniqueConstraint(name = "flat-detail", columnNames = {"flat_number","flat_block"})
 })
 public class Flat
 {
@@ -28,12 +28,12 @@ public class Flat
     private String flatBlock;
     private boolean occupied;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "society_id")
     private Society society;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE, optional = true)
-    @JoinColumn(name = "email")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Flat(String flatNumber, String flatBlock, boolean occupied, Society society)
