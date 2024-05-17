@@ -6,15 +6,17 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 
 @Slf4j
-public class EmailConsumer
+public class NotificationConsumer
 {
 
-    @KafkaListener(topics = {"email-topic"})
+    @KafkaListener(id = "${consumer.id}",topics = {"${notification.topic.name}"},
+                            containerFactory = "notificationListenerConsumerFactory")
     public void consumerEmail(ConsumerRecord<String,EmailDto> record)
     {
         String topic = record.topic();
         log.info("Msg read from topic: {}",topic);
         EmailDto emailDto = record.value();
         log.info("Email Body: {}", emailDto.getBody());
+        //Send Email
     }
 }

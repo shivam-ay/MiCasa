@@ -1,7 +1,7 @@
 package com.micasa.notificationservice.configuration;
 
 import com.micasa.notificationservice.dto.EmailDto;
-import com.micasa.notificationservice.service.EmailConsumer;
+import com.micasa.notificationservice.service.NotificationConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -16,10 +16,13 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Configuration class for notification consumers.
+ */
 @Slf4j
 @EnableKafka
 @Configuration
-public class EmailConsumerConfig
+public class NotificationConsumerConfig
 {
     @Bean
     protected Map<String,Object> consumerConfigs()
@@ -28,7 +31,6 @@ public class EmailConsumerConfig
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,"localhost:9092");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "email-consumer");
         return props;
     }
 
@@ -39,7 +41,7 @@ public class EmailConsumerConfig
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String,EmailDto> kafkaListener()
+    public ConcurrentKafkaListenerContainerFactory<String,EmailDto> notificationListenerConsumerFactory()
     {
         ConcurrentKafkaListenerContainerFactory<String, EmailDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         Map<String, Object> props = this.consumerConfigs();
@@ -48,8 +50,8 @@ public class EmailConsumerConfig
     }
 
     @Bean(name = "email-listener")
-    public EmailConsumer emailConsumer()
+    public NotificationConsumer emailConsumer()
     {
-        return new EmailConsumer();
+        return new NotificationConsumer();
     }
 }
